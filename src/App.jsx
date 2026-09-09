@@ -16,7 +16,7 @@ const services = [
 ]
 const values = [['✦', 'Compassionate Service'], ['↗', 'Dependable Transportation'], ['⌁', 'Safety-Focused'], ['◌', 'Professional Drivers'], ['□', 'Comfortable Rides'], ['♡', 'Personalized Assistance']]
 
-function Logo({ light = false }) { return <a className={`logo ${light ? 'logo-light' : ''}`} href="/" aria-label="Malydia home"><img className="logo-image" src="/ChatGPT%20Image%20Sep%209,%202026,%2012_15_43%20PM.png" alt="Malydia Healthcare Transportation logo" /></a> }
+function Logo({ light = false }) { return <a className={`logo ${light ? 'logo-light' : ''}`} href="/" aria-label="Malydia home"><img className="logo-image" src="/malydia-logo.png" alt="Malydia Healthcare Transportation logo" /></a> }
 function Button({ href, children, secondary = false }) { return <a className={`button ${secondary ? 'secondary' : ''}`} href={href}>{children}<span>↗</span></a> }
 function Header({ open, setOpen }) {
   const links = [['/', 'Home'], ['/about', 'About Us'], ['/services', 'Services'], ['/service-area', 'Service Area'], ['/book-a-ride', 'Book a Ride'], ['/contact', 'Contact']]
