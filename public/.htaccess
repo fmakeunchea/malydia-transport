@@ -5,6 +5,9 @@ RewriteEngine On
 RewriteRule ^api/ride-request/?$ api/ride-request.php [END]
 RewriteRule ^api/ - [L]
 
+# Serve each page's search metadata without adding a trailing slash.
+RewriteRule ^(about|services|service-area|book-a-ride|contact|privacy-policy|terms)/?$ $1/index.html [END]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]

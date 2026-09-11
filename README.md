@@ -65,3 +65,18 @@ References: [Zoho SMTP settings](https://www.zoho.com/mail/help/zoho-smtp.html),
 ## Content privacy check
 
 Page titles, static metadata, image alt text, and route paths do not contain rider information or coverage status. No Medicaid/FAMIS references are currently present in public site source. Keep future reviews, metadata, and image descriptions free of identifiable rider coverage details. This source review is not a HIPAA compliance certification.
+
+## Google search setup
+
+The build generates route-specific HTML titles, descriptions, canonical links,
+`robots.txt`, and `sitemap.xml`. React still renders the page body in the browser.
+Upload the full contents of `dist/`, including the route folders and `.htaccess`,
+to `public_html`. Keep the private SMTP configuration outside that folder.
+
+After uploading, verify `https://malydiahealth.com/` in Google Search Console,
+submit `sitemap.xml`, and use URL Inspection to request homepage indexing.
+Account verification must be completed by the owner. Indexing and ranking are
+controlled by Google and are not guaranteed by submitting a sitemap.
+
+The owner confirmed service in Fredericksburg, Spotsylvania, Stafford, and
+Caroline, with regular-vehicle passenger transport only at present.

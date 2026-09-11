@@ -39,8 +39,8 @@ export default function RideForm() {
     <label>Drop-off address<input name="dropoff" required maxLength={300} placeholder="Street address, city, state, ZIP; facility if known" /></label>
     <div className="form-row"><label>Pickup date<input name="date" required type="date" min={today} /></label><label>Pickup time<input name="time" required type="time" /></label></div>
     <fieldset><legend>Return ride needed?</legend><label><input type="radio" name="returnRide" value="yes" required /> Yes</label><label><input type="radio" name="returnRide" value="no" required /> No</label></fieldset>
-    <label>Mobility needs<select name="mobility" required defaultValue=""><option value="" disabled>Select a mobility need</option><option value="ambulatory">Ambulatory (able to walk)</option><option value="wheelchair">Wheelchair</option><option value="stretcher">Stretcher</option></select></label>
-    <p className="notice">Wheelchair and stretcher requests require confirmation of appropriate vehicle and service availability. This is non-emergency transportation.</p>
+    <label>Mobility needs<select name="mobility" required defaultValue=""><option value="" disabled>Select a mobility need</option><option value="ambulatory">Able to ride in a regular vehicle</option></select></label>
+    <p className="notice">We currently transport passengers who can ride in a regular vehicle. Wheelchair-accessible and stretcher transportation are unavailable. This is non-emergency transportation.</p>
     <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
     <p className="notice">Please do not include diagnoses, insurance or coverage details, or other unnecessary medical information. We use these details to coordinate your request and send them to our team through our notification provider. Read our <a href="/privacy-policy">Privacy Policy</a>.</p>
     <p className="notice">Submitting a request does not guarantee transportation. Our team will confirm availability and the trip price with you.</p>

@@ -31,3 +31,7 @@ dist-ssr
 server/vendor/
 server/config.php
 server/booking-state.json
+
+# Local deployment packages and private hosting configuration
+malydia-private/
+*.zip
