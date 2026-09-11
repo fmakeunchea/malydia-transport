@@ -1,0 +1,19 @@
+
+/* Trust and booking additions retain the established forest, gold, and typefaces. */
+.trust-band{background:var(--forest);color:#fff;border-top:1px solid #ffffff26;padding:30px 0}
+.trust-points{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.trust-points>div{display:flex;align-items:center;gap:12px;font-size:14px;line-height:1.5}
+.trust-points span{color:var(--gold);font-size:22px}
+.credentials{background:#edf1e9}.credentials h2,.trust-title,.pricing-panel h2{font-size:clamp(36px,5vw,54px);line-height:1.1}
+.credential-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.credential-grid article,.review-card{border-top:2px solid var(--gold);padding:26px 0}.credential-grid h3{font-size:28px}
+.credential-grid p,.review-empty p,.pricing-panel p{color:var(--muted);line-height:1.75}
+.review-empty{max-width:670px;border-left:3px solid var(--gold);padding-left:25px}.review-empty .small-copy{margin:22px 0 0}
+.review-card{margin:0}.review-card blockquote{margin:0 0 20px;font:24px/1.5 Georgia,serif}.review-card figcaption{color:var(--muted)}
+.pricing-panel{display:grid;grid-template-columns:1fr 1fr;gap:80px}.pricing-panel .small-copy{margin-top:24px}
+.contact-detail{line-height:1.65}.ride-form select{width:100%;min-width:0;font:inherit;border:1px solid #063c2b38;background:#fff;padding:13px 14px;color:var(--forest);border-radius:2px}
+.ride-form select:focus{outline:2px solid var(--gold)}.ride-form input{min-width:0}.ride-form .small-copy{margin-bottom:0}
+.form-honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}.form-error{color:#8a241c;line-height:1.6}.form-error a,.notice a,.success a{text-decoration:underline}
+.button:disabled{opacity:.65;cursor:wait;transform:none}a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+@media(max-width:780px){.trust-points{grid-template-columns:1fr 1fr}.credential-grid,.pricing-panel{grid-template-columns:1fr;gap:24px}}
+@media(max-width:480px){.trust-points{grid-template-columns:1fr}}
