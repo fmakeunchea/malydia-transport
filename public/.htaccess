@@ -1,5 +1,10 @@
+Options -Indexes
 RewriteEngine On
-RewriteBase /
+
+# Preserve the booking URL and keep unknown API routes out of the React fallback.
+RewriteRule ^api/ride-request/?$ api/ride-request.php [END]
+RewriteRule ^api/ - [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]

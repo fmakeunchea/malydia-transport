@@ -1,0 +1,6 @@
+{
+  "name": "malydia/booking",
+  "description": "Private Hostinger booking notification service",
+  "require": { "php": ">=8.2", "phpmailer/phpmailer": "^7.0" },
+  "config": { "sort-packages": true }
+}

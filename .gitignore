@@ -27,3 +27,7 @@ dist-ssr
 .env.*
 !.env.example
 .netlify
+
+server/vendor/
+server/config.php
+server/booking-state.json

@@ -1,7 +1,7 @@
 # Malydia Healthcare Transportation
 
 React/Vite site. Run `npm install`, `npm run dev`, `npm run build`, and `npm run lint`.
-Booking handler tests: `node --test tests/*.test.mjs` (mocked provider; no email is sent).
+Booking handler tests: `php tests/booking.test.php` (PHP 8.2+, mocked sender; no email is sent).
 
 ## Verified business content
 
@@ -17,19 +17,50 @@ Edit `src/business.js` after owner confirmation:
 
 Until verified, the site invites credential questions and calls for availability instead of asserting unverified credentials or promising invented hours. Private-pay pricing uses “Call for a quote.”
 
-## Booking notifications — deployment setup required
+## Hostinger Web/Cloud + Zoho booking notifications
 
-The previous form never transmitted requests. The replacement posts to `/api/ride-request`, implemented as a Netlify Function with a Resend email notification to **info@malydiahealth.com**. No actual delivery has been verified locally.
+The form posts to `/api/ride-request`. Hostinger routes this to the PHP endpoint in `public/api/ride-request.php` using `public/.htaccess`. Notifications are sent from and to **info@malydiahealth.com** using authenticated Zoho SMTP. The prior Netlify/Resend integration has been removed.
 
-1. Deploy to Netlify using the included `netlify.toml` (includes SPA route fallback). If hosted elsewhere, port the handler to that host's server runtime; a static-only deployment cannot send notifications.
-2. Configure `RESEND_API_KEY` and `BOOKING_FROM_EMAIL` as server-side Netlify environment variables with Functions scope. The sender must belong to a verified Resend domain. Never use VITE-prefixed variables for secrets.
-3. Use `netlify dev` for a local end-to-end run; plain `npm run dev` serves only the frontend. Without the function, submission displays a failure and offers phone contact.
-4. After configuration, submit a clearly labeled synthetic request, confirm the message arrives at info@malydiahealth.com, and check provider delivery status/spam filtering. Do not use real rider information for testing.
-5. Confirm provider arrangements and access controls are appropriate for the trip/contact information being processed before enabling production intake.
+### Deploy
 
-The handler validates required fields, checks same-origin requests, limits request size, applies Netlify rate limiting, ignores unrecognized fields, and uses idempotency keys for retries. It sends a generic subject with trip details in the email body; it does not log request bodies. The frontend stores no rider data in URLs or browser storage and only reports success after provider acceptance. Acceptance is not proof of inbox delivery or a confirmed ride. Delivery failures retain form values and offer retry/phone contact.
+Use PHP 8.2 or newer with OpenSSL enabled. Run `npm run build`, then upload the **contents** of `dist/` to the domain's `public_html/`, including the hidden `.htaccess` and `api/` directory. Uploading source code or pushing to GitHub alone does not deploy the built site unless your deployment pipeline performs these steps.
 
-Provider references: [Netlify Functions API](https://docs.netlify.com/build/functions/api/), [environment variables](https://docs.netlify.com/build/functions/environment-variables/), [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys).
+Place the contents of `server/` in a sibling folder named `malydia-private`, outside `public_html`:
+
+```text
+domain-folder/
+  malydia-private/
+    booking.php
+    composer.json
+    composer.lock  (generated on first Composer install)
+    config.php
+    vendor/
+  public_html/
+    .htaccess
+    index.html
+    assets/
+    api/ride-request.php
+```
+
+In `malydia-private`, run `composer2 install --no-dev --optimize-autoloader` over Hostinger SSH. Composer 2 is available on supported Hostinger Web/Cloud plans. The folder must be writable by PHP for its private rate-limit/deduplication state file. Keep the folder private to the hosting account; set `config.php` permissions to `600`.
+
+Copy `config.example.php` to `config.php` in that private folder. Set:
+
+- `origins`: the exact HTTPS website origin(s), with no trailing slash, including www if used.
+- `smtp_host`: the exact outgoing host shown in **Zoho Mail → Settings → Mail Accounts → Server Configuration**. Account type and region determine the host; do not guess.
+- `smtp_port`: `465` for implicit TLS or `587` for STARTTLS.
+- `smtp_username`: `info@malydiahealth.com`.
+- `smtp_password`: the Zoho application-specific password, entered privately on the server. Never paste it into chat, commit it, or put it in a VITE variable/public file.
+
+No credentials or hosting access are present in this repository, so live delivery has not been verified. After deployment, submit a clearly labeled synthetic request and confirm its arrival in the company inbox. Check success, retry, and direct navigation to `/book-a-ride`. Missing configuration or SMTP failures must display the form's failure message. A plain Vite dev/preview server cannot execute PHP.
+
+### Request behavior
+
+The PHP handler validates trip fields, restricts origins, limits payload size, and sends a generic email subject with trip details in a plain-text body. It keeps no rider data in application logs or local state. The private state file stores hashes/timestamps for five attempts per IP per minute, fifty attempts total per minute, and 24-hour duplicate suppression. Expired state entries are pruned on the next accepted attempt. One nonblocking file lock serializes submissions for this small-volume site; concurrent requests can receive a retryable unavailable response.
+
+Confirmation means Zoho accepted the message, not that it reached the inbox or the ride is booked. SMTP disconnections after acceptance, or a failure to save the success marker, can still cause duplicates on retry; the team should verify requests before scheduling. Zoho may retain sent mail in its Sent folder; manage mailbox access and retention for booking information.
+
+References: [Zoho SMTP settings](https://www.zoho.com/mail/help/zoho-smtp.html), [Hostinger Composer](https://www.hostinger.com/support/5792078-how-to-use-composer-at-hostinger/), [PHPMailer](https://github.com/PHPMailer/PHPMailer).
 
 ## Content privacy check
 
