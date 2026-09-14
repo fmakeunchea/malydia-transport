@@ -38,12 +38,12 @@ function writeBookingState($file, array $state): void
 }
 
 // The injected sender lets tests exercise delivery failures without contacting Zoho.
-function handleBooking(array $request, string $body, array $config, string $statePath, callable $send, ?callable $validate = null, ?callable $format = null, ?array $fields = null): int
+function handleBooking(array $request, string $body, array $config, string $statePath, callable $send, ?callable $validate = null, ?callable $format = null, ?array $fields = null, int $maxBodyBytes = 6000): int
 {
     if (($request['REQUEST_METHOD'] ?? '') !== 'POST') return 405;
     if (!in_array($request['HTTP_ORIGIN'] ?? '', $config['origins'] ?? [], true)) return 403;
     if (!str_starts_with(strtolower($request['CONTENT_TYPE'] ?? ''), 'application/json')) return 415;
-    if (strlen($body) > 6000) return 413;
+    if (strlen($body) > $maxBodyBytes) return 413;
     try { $data = json_decode($body, true, 32, JSON_THROW_ON_ERROR); } catch (JsonException $error) { return 400; }
     if (!is_array($data) || !($validate ?? 'validBooking')($data)) return 400;
     // Keep only accepted fields; no extra input can enter the email or deduplication state.
