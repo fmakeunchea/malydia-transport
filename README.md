@@ -80,3 +80,11 @@ controlled by Google and are not guaranteed by submitting a sitemap.
 
 The owner confirmed service in Fredericksburg, Spotsylvania, Stafford, and
 Caroline, with regular-vehicle passenger transport only at present.
+
+## Owner-driver application & waiting list
+
+`/owner-drivers` is linked from the main navigation and footer and included in generated page metadata and the sitemap. The form posts to `/api/owner-driver`, which uses the same private Zoho configuration and PHPMailer dependency as booking notifications. Deploy the updated `dist/` contents (including `.htaccess` and both PHP endpoints), and copy both `server/booking.php` and `server/owner-driver.php` into `malydia-private`. Preserve the existing private `config.php` and `vendor/` folder.
+
+Applications go to info@malydiahealth.com with a distinct owner-driver subject. **The waiting list is managed manually in the company mailbox**, not in a dashboard or separate database. Staff should review applications, retain them for consideration, and honor update/removal requests. The form collects explicit consent for this purpose and does not request identity documents or financial details. No approval, position, earnings, or response deadline is promised.
+
+Driver validation, consent, notification failure, duplicate suppression, and throttling tests: `php tests/owner-driver.test.php`. Also run `php tests/booking.test.php` after changes to the shared notification handler. Live SMTP acceptance and inbox delivery require configured Hostinger/Zoho access; local tests send no email.

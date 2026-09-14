@@ -35,3 +35,5 @@ server/booking-state.json
 # Local deployment packages and private hosting configuration
 malydia-private/
 *.zip
+
+server/driver-state.json

@@ -38,16 +38,16 @@ function writeBookingState($file, array $state): void
 }
 
 // The injected sender lets tests exercise delivery failures without contacting Zoho.
-function handleBooking(array $request, string $body, array $config, string $statePath, callable $send): int
+function handleBooking(array $request, string $body, array $config, string $statePath, callable $send, ?callable $validate = null, ?callable $format = null, ?array $fields = null): int
 {
     if (($request['REQUEST_METHOD'] ?? '') !== 'POST') return 405;
     if (!in_array($request['HTTP_ORIGIN'] ?? '', $config['origins'] ?? [], true)) return 403;
     if (!str_starts_with(strtolower($request['CONTENT_TYPE'] ?? ''), 'application/json')) return 415;
     if (strlen($body) > 6000) return 413;
     try { $data = json_decode($body, true, 32, JSON_THROW_ON_ERROR); } catch (JsonException $error) { return 400; }
-    if (!is_array($data) || !validBooking($data)) return 400;
+    if (!is_array($data) || !($validate ?? 'validBooking')($data)) return 400;
     // Keep only accepted fields; no extra input can enter the email or deduplication state.
-    $data = array_intersect_key($data, array_flip(['firstName', 'lastName', 'phone', 'email', 'pickup', 'dropoff', 'date', 'time', 'mobility', 'returnRide', 'requestId']));
+    $data = array_intersect_key($data, array_flip($fields ?? ['firstName', 'lastName', 'phone', 'email', 'pickup', 'dropoff', 'date', 'time', 'mobility', 'returnRide', 'requestId']));
     $data['email'] = $data['email'] ?? '';
     if (empty($config['smtp_host']) || empty($config['smtp_password']) || ($config['smtp_username'] ?? '') !== 'info@malydiahealth.com' || !in_array($config['smtp_port'] ?? 0, [465, 587], true)) return 503;
     // One small private state file holds only hashes/timestamps. Lock across send to avoid concurrent duplicate emails.
@@ -63,7 +63,7 @@ function handleBooking(array $request, string $body, array $config, string $stat
         $state['sent'] = array_filter($state['sent'], fn($time) => $time > $now - 86400);
         $state['attempts'] = array_map(fn($times) => array_values(array_filter($times, fn($time) => $time > $now - 60)), $state['attempts']);
         $state['attempts'] = array_filter($state['attempts']);
-        $key = hash('sha256', $data['requestId'] . bookingText($data));
+        $key = hash('sha256', $data['requestId'] . ($format ?? 'bookingText')($data));
         if (isset($state['sent'][$key])) return 200;
         // Use the actual server-provided peer address, not a client-controlled forwarded header.
         $ip = hash('sha256', $request['REMOTE_ADDR'] ?? 'unknown');
@@ -84,6 +84,11 @@ function handleBooking(array $request, string $body, array $config, string $stat
 
 function sendBookingEmail(array $config, array $data): void
 {
+    sendNotificationEmail($config, 'New website ride request', bookingText($data));
+}
+
+function sendNotificationEmail(array $config, string $subject, string $body): void
+{
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
     $mail->isSMTP();
     $mail->Host = $config['smtp_host'];
@@ -99,7 +104,7 @@ function sendBookingEmail(array $config, array $data): void
     $mail->CharSet = 'UTF-8';
     $mail->setFrom('info@malydiahealth.com', 'Malydia Healthcare Transportation');
     $mail->addAddress('info@malydiahealth.com');
-    $mail->Subject = 'New website ride request';
-    $mail->Body = bookingText($data);
+    $mail->Subject = $subject;
+    $mail->Body = $body;
     if (!$mail->send()) throw new RuntimeException('Delivery not accepted');
 }

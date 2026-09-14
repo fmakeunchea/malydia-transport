@@ -1,5 +1,6 @@
 export const siteUrl = 'https://malydiahealth.com'
 export const pages = {
+  '/owner-drivers': ['Owner-Driver Application & Waiting List | Malydia', 'Express your interest in driving your own vehicle with Malydia Healthcare Transportation in Fredericksburg, Spotsylvania, Stafford, and Caroline, Virginia.'],
   '/': ['Medical Transportation in Fredericksburg, VA | Malydia', 'Non-emergency transportation for passengers who can ride in a regular vehicle. Serving Fredericksburg, Spotsylvania, Stafford and Caroline. Call for a quote.'],
   '/about': ['About Malydia Healthcare Transportation | Virginia', 'Meet Malydia Healthcare Transportation, serving passengers and families in Fredericksburg, Spotsylvania, Stafford and Caroline, Virginia.'],
   '/services': ['Medical Appointment & Senior Transportation | Malydia', 'Request regular-vehicle rides for medical appointments, dialysis, therapy and senior transportation in the Fredericksburg region. Call for availability.'],
