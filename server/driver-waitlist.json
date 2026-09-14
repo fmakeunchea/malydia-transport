@@ -1,0 +1,427 @@
+{
+  "groups": [
+    {
+      "title": "Personal Information",
+      "start": 1,
+      "end": 6
+    },
+    {
+      "title": "Driver Information",
+      "start": 7,
+      "end": 14
+    },
+    {
+      "title": "Owner-Driver Vehicle",
+      "start": 15,
+      "end": 26
+    },
+    {
+      "title": "Certifications & Availability",
+      "start": 27,
+      "end": 33
+    },
+    {
+      "title": "Final Questions",
+      "start": 34,
+      "end": 38
+    }
+  ],
+  "fields": [
+    {
+      "number": 1,
+      "name": "fullName",
+      "label": "Full Legal Name",
+      "type": "text",
+      "required": true,
+      "maxLength": 160,
+      "autoComplete": "name"
+    },
+    {
+      "number": 2,
+      "name": "phone",
+      "label": "Phone Number",
+      "type": "tel",
+      "required": true,
+      "maxLength": 30,
+      "autoComplete": "tel"
+    },
+    {
+      "number": 3,
+      "name": "email",
+      "label": "Email Address",
+      "type": "email",
+      "required": true,
+      "maxLength": 254,
+      "autoComplete": "email"
+    },
+    {
+      "number": 4,
+      "name": "city",
+      "label": "City",
+      "type": "text",
+      "required": true,
+      "maxLength": 100,
+      "autoComplete": "address-level2"
+    },
+    {
+      "number": 5,
+      "name": "state",
+      "label": "State",
+      "type": "text",
+      "required": true,
+      "maxLength": 60,
+      "autoComplete": "address-level1"
+    },
+    {
+      "number": 6,
+      "name": "zip",
+      "label": "ZIP Code",
+      "type": "text",
+      "required": true,
+      "maxLength": 10,
+      "autoComplete": "postal-code",
+      "pattern": "[0-9]{5}(-[0-9]{4})?"
+    },
+    {
+      "number": 7,
+      "name": "atLeast18",
+      "label": "Are you at least 18 years old?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "validLicense",
+      "label": "Do you currently have a valid driver's license?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "licenseState",
+      "label": "What state issued your driver's license?",
+      "type": "text",
+      "required": true,
+      "maxLength": 60
+    },
+    {
+      "number": 10,
+      "name": "yearsLicensed",
+      "label": "How many years have you been a licensed driver?",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "number": 11,
+      "name": "hasExperience",
+      "label": "Do you have experience providing NEMT, healthcare, caregiving, DSP, rideshare, delivery, or professional transportation services?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 12,
+      "name": "experience",
+      "label": "If yes, briefly describe your experience.",
+      "type": "textarea",
+      "required": false,
+      "maxLength": 1000,
+      "visibleWhen": {
+        "field": "hasExperience",
+        "value": "Yes"
+      }
+    },
+    {
+      "number": 13,
+      "name": "authorizeChecks",
+      "label": "Are you willing to complete required background and driving-record checks?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 14,
+      "name": "completeTraining",
+      "label": "Are you willing to complete required NEMT and safety training?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 15,
+      "name": "useOwnVehicle",
+      "label": "Are you interested in using your own vehicle to provide ambulatory NEMT services?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 16,
+      "name": "ownsVehicle",
+      "label": "Do you own the vehicle you plan to use?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 17,
+      "name": "vehicleYear",
+      "label": "Vehicle Year",
+      "type": "number",
+      "required": true,
+      "min": 1900,
+      "max": "nextYear"
+    },
+    {
+      "number": 18,
+      "name": "vehicleMake",
+      "label": "Vehicle Make",
+      "type": "text",
+      "required": true,
+      "maxLength": 60
+    },
+    {
+      "number": 19,
+      "name": "vehicleModel",
+      "label": "Vehicle Model",
+      "type": "text",
+      "required": true,
+      "maxLength": 60
+    },
+    {
+      "number": 20,
+      "name": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "select",
+      "required": true,
+      "options": [
+        "Sedan",
+        "SUV",
+        "Minivan",
+        "Van",
+        "Other"
+      ]
+    },
+    {
+      "number": 21,
+      "name": "seatingCapacity",
+      "label": "How many people can the vehicle seat, including the driver?",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 100
+    },
+    {
+      "number": 22,
+      "name": "currentRegistration",
+      "label": "Does the vehicle currently have valid registration?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 23,
+      "name": "currentInsurance",
+      "label": "Does the vehicle currently have valid insurance?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 24,
+      "name": "currentInspection",
+      "label": "Does the vehicle have a current Virginia safety inspection, if required?",
+      "type": "choice",
+      "required": false,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 25,
+      "name": "vehicleCondition",
+      "label": "Is the vehicle clean, safe, and in good operating condition?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 26,
+      "name": "wheelchairAccessible",
+      "label": "Is the vehicle wheelchair accessible?",
+      "type": "choice",
+      "required": false,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 27,
+      "name": "cprFirstAid",
+      "label": "Do you currently have CPR/First Aid certification?",
+      "type": "select",
+      "required": false,
+      "options": [
+        "Yes",
+        "No",
+        "Expired"
+      ]
+    },
+    {
+      "number": 28,
+      "name": "defensiveDriving",
+      "label": "Have you completed defensive-driving training?",
+      "type": "choice",
+      "required": false,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 29,
+      "name": "passengerAssistance",
+      "label": "Have you completed passenger-assistance or NEMT training?",
+      "type": "choice",
+      "required": false,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 30,
+      "name": "availability",
+      "label": "When are you available?",
+      "type": "multiple",
+      "required": true,
+      "options": [
+        "Weekday mornings",
+        "Weekday afternoons",
+        "Evenings",
+        "Overnight",
+        "Saturdays",
+        "Sundays"
+      ]
+    },
+    {
+      "number": 31,
+      "name": "workInterest",
+      "label": "Are you interested in:",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Full-time",
+        "Part-time",
+        "On-call"
+      ]
+    },
+    {
+      "number": 32,
+      "name": "serviceAreas",
+      "label": "What areas are you willing to serve?",
+      "type": "text",
+      "required": true,
+      "maxLength": 300
+    },
+    {
+      "number": 33,
+      "name": "onboardingStart",
+      "label": "How soon would you be available to begin the onboarding process?",
+      "type": "text",
+      "required": true,
+      "maxLength": 200
+    },
+    {
+      "number": 34,
+      "name": "motivation",
+      "label": "Why are you interested in driving with Malydia Healthcare Transportation LLC?",
+      "type": "textarea",
+      "required": false,
+      "maxLength": 1000
+    },
+    {
+      "number": 35,
+      "name": "assistPassengers",
+      "label": "Are you comfortable assisting elderly individuals and passengers who may need additional assistance entering or exiting the vehicle?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 36,
+      "name": "followProcedures",
+      "label": "Are you willing to follow Malydia's passenger-safety, confidentiality, documentation, and trip procedures?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "number": 37,
+      "name": "referralSource",
+      "label": "How did you hear about Malydia?",
+      "type": "select",
+      "required": false,
+      "options": [
+        "Website",
+        "Facebook",
+        "Instagram",
+        "Indeed",
+        "Referral",
+        "Friend or Family",
+        "Other"
+      ]
+    },
+    {
+      "number": 38,
+      "name": "additionalInfo",
+      "label": "Anything else you would like us to know?",
+      "type": "textarea",
+      "required": false,
+      "maxLength": 1000
+    }
+  ],
+  "acknowledgment": "I understand that submitting this form only expresses my interest in joining the Malydia Healthcare Transportation LLC driver network. Submission does not guarantee employment, independent-contractor status, compensation, trip assignments, or authorization to transport passengers. I understand that I must successfully complete all applicable driver, vehicle, insurance, screening, training, credentialing, and company requirements before I may be approved to provide transportation services."
+}

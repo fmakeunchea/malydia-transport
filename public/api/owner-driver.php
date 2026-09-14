@@ -18,7 +18,7 @@ try {
     // Read at most one byte over the limit, rather than loading an unbounded request.
     $body = file_get_contents('php://input', false, null, 0, 16001);
     $status = handleDriver($_SERVER, $body === false ? '' : $body, $config, $private . '/driver-state.json', function (array $data) use ($config): void {
-        sendNotificationEmail($config, 'New owner-driver application — waiting list', driverText($data));
+        sendNotificationEmail($config, 'New driver waiting-list submission', driverText($data));
     });
     http_response_code($status);
     if ($status === 429) header('Retry-After: 60');
