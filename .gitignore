@@ -37,3 +37,6 @@ malydia-private/
 *.zip
 
 server/driver-state.json
+
+# Private company planning; distribute only via the private server upload.
+/server/driver-internal.txt

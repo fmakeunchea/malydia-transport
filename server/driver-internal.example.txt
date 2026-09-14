@@ -1,0 +1,13 @@
+7. OWNER-DRIVER PROGRAM FRAMEWORK — INTERNAL REVIEW
+
+Add the approved internal classification-review guidance in driver-internal.txt outside public_html.
+
+8. SAMPLE COMPENSATION PLANNING - NOT A PAY OFFER
+
+Internal planning has not been configured. This blank template is not a compensation offer and does not set any driver rates.
+
+Completed ambulatory trip base: __________________
+Loaded mileage: _________________________________
+Waiting time: ___________________________________
+Tolls/parking: ___________________________________
+No-show/cancellation: ____________________________

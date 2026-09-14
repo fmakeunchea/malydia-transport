@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import driverOptions from '../server/driver-options.json'
+import driverProgram from '../server/driver-program.json'
 
 const availabilityOptions = ['Weekdays', 'Evenings', 'Weekends', 'Full-time', 'Part-time']
 function Field({ name, label, ...props }) {
@@ -88,6 +89,14 @@ export default function OwnerDrivers() {
         <label>Other relevant certifications (optional)<textarea name="otherCertifications" rows="3" maxLength={500} /></label>
       </fieldset>
       <aside className="notice"><strong>6. Malydia onboarding checklist — office use</strong><br />Our team completes the onboarding checklist and assigns an application status after review. You do not need to complete this section.</aside>
+      <section className="driver-program"><h2>7. Owner-driver program framework</h2><p><strong>Proposed model:</strong> {driverProgram.model}</p></section>
+      <fieldset className="driver-group"><legend>9. Applicant acknowledgment</legend>
+        <p className="small-copy">{driverProgram.acknowledgment}</p>
+        <label className="driver-consent"><input name="acknowledgment" type="checkbox" value="yes" required /><span>I have read and acknowledge the statement above.</span></label>
+        <Field name="applicantSignature" label="Applicant signature (type your full name)" maxLength={160} autoComplete="off" />
+        <Field name="printedName" label="Printed name" maxLength={160} />
+        <Field name="signatureDate" label="Date" type="date" required />
+      </fieldset>
       <label className="form-honeypot" aria-hidden="true">Leave empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
       <label className="driver-consent"><input name="consent" type="checkbox" value="yes" required /><span>I confirm these details are accurate and agree that Malydia may contact me about my application and keep it for waiting-list consideration. I can request removal by emailing info@malydiahealth.com. I have read the <a href="/privacy-policy">Privacy Policy</a>.</span></label>
       {status === 'error' && <p className="form-error" role="alert">We could not confirm your application was sent. Your details remain here. Please retry or call <a href="tel:5404241852">(540) 424-1852</a>.</p>}

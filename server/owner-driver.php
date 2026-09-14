@@ -22,12 +22,12 @@ function driverLabels(): array
 }
 function driverFields(): array
 {
-    return [...array_keys(driverLabels()), 'availability', 'safetyChecks', ...array_keys(driverOptions()['credentials']), 'otherCertifications', 'consent', 'requestId'];
+    return [...array_keys(driverLabels()), 'availability', 'safetyChecks', ...array_keys(driverOptions()['credentials']), 'otherCertifications', 'acknowledgment', 'applicantSignature', 'printedName', 'signatureDate', 'consent', 'requestId'];
 }
 function validDriver(array $data): bool
 {
-    if (!empty($data['website']) || ($data['consent'] ?? '') !== 'yes') return false;
-    $limits = ['fullName' => 160, 'streetAddress' => 200, 'city' => 100, 'state' => 60, 'zip' => 10, 'phone' => 30, 'email' => 254, 'licenseState' => 60, 'licenseNumber' => 40, 'licenseExpiration' => 10, 'experience' => 1000, 'serviceAreas' => 300, 'vehicleMake' => 60, 'vehicleModel' => 60, 'vin' => 17, 'licensePlate' => 60, 'requestId' => 36];
+    if (!empty($data['website']) || ($data['consent'] ?? '') !== 'yes' || ($data['acknowledgment'] ?? '') !== 'yes') return false;
+    $limits = ['applicantSignature' => 160, 'printedName' => 160, 'signatureDate' => 10, 'fullName' => 160, 'streetAddress' => 200, 'city' => 100, 'state' => 60, 'zip' => 10, 'phone' => 30, 'email' => 254, 'licenseState' => 60, 'licenseNumber' => 40, 'licenseExpiration' => 10, 'experience' => 1000, 'serviceAreas' => 300, 'vehicleMake' => 60, 'vehicleModel' => 60, 'vin' => 17, 'licensePlate' => 60, 'requestId' => 36];
     foreach ($limits as $key => $limit) {
         if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '' || preg_match_all('/./us', $data[$key]) > $limit) return false;
         // A plain-text experience paragraph may contain line breaks; other inputs must be single-line.
@@ -37,6 +37,8 @@ function validDriver(array $data): bool
     if (!preg_match('/^\d{5}(-\d{4})?$/D', $data['zip']) || !preg_match('/^[A-Za-z0-9]{6,17}$/D', $data['vin'])) return false;
     $date = DateTimeImmutable::createFromFormat('!Y-m-d', $data['licenseExpiration']);
     if (!$date || $date->format('Y-m-d') !== $data['licenseExpiration']) return false;
+    $signed = DateTimeImmutable::createFromFormat('!Y-m-d', $data['signatureDate']);
+    if (!$signed || $signed->format('Y-m-d') !== $data['signatureDate']) return false;
     foreach (['atLeast18', 'licensedTwoYears', 'authorizeChecks', 'completeTraining', 'vehicleAuthority', 'wheelchairAccessible', 'currentRegistration', 'currentInspection', 'currentInsurance'] as $key) {
         if (!in_array($data[$key] ?? null, ['Yes', 'No'], true)) return false;
     }
@@ -85,6 +87,23 @@ function driverText(array $data): string
     $lines[] = 'For staff completion only. No verification, approval, or activation is implied by this submission.';
     foreach ($options['office'] as $label) $lines[] = '[ ] ' . $label;
     $lines[] = 'Status (office to assign): ' . implode('  ', array_map(fn($status) => '[ ] ' . $status, $options['officeStatuses']));
+    $program = json_decode(file_get_contents(__DIR__ . '/driver-program.json'), true, 32, JSON_THROW_ON_ERROR);
+    $lines[] = "\n7. OWNER-DRIVER PROGRAM FRAMEWORK";
+    $lines[] = 'Proposed model: ' . $program['model'];
+    $internalPath = __DIR__ . '/driver-internal.txt';
+    $internal = file_get_contents(is_file($internalPath) ? $internalPath : __DIR__ . '/driver-internal.example.txt');
+    if ($internal === false) throw new RuntimeException('Internal review template unavailable');
+    $lines[] = "\n" . $internal;
+    $lines[] = "\n9. APPLICANT ACKNOWLEDGMENT";
+    $lines[] = $program['acknowledgment'];
+    $lines[] = 'Applicant acknowledged the statement: yes';
+    $lines[] = 'Applicant signature (typed): ' . $data['applicantSignature'];
+    $lines[] = 'Printed name: ' . $data['printedName'];
+    $lines[] = 'Date: ' . $data['signatureDate'];
+    $lines[] = "\nMalydia Healthcare Transportation LLC - Internal Review";
+    $lines[] = 'Reviewed by: ______________________________';
+    $lines[] = 'Date: ____________________________________';
+    $lines[] = 'Notes: ___________________________________';
     return implode("\n", $lines);
 }
 function handleDriver(array $request, string $body, array $config, string $statePath, callable $send): int
