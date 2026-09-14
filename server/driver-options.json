@@ -1,0 +1,38 @@
+{
+  "safety": {
+    "cleanEntry": "Clean interior and exterior; safe passenger entry/exit",
+    "seatBelts": "All required seat belts function properly",
+    "climate": "Heating and air conditioning function properly",
+    "lightsControls": "Headlights, brake lights, turn signals, horn, mirrors and wipers function",
+    "tires": "Tires have safe tread and inflation; no obvious unsafe damage",
+    "doorsWindows": "Doors and windows operate safely",
+    "instruments": "Speedometer and odometer function",
+    "safetyEquipment": "Required emergency/safety equipment is present",
+    "smokeFree": "Vehicle is free of smoking/vaping odor during service",
+    "mechanical": "No known mechanical condition that would make passenger transport unsafe"
+  },
+  "credentials": {
+    "cprFirstAid": "CPR / First Aid",
+    "defensiveDriving": "Defensive driving",
+    "passengerAssistance": "Passenger assistance / PASS or similar",
+    "confidentialityTraining": "HIPAA / confidentiality training"
+  },
+  "trainingStatuses": ["Current", "Expired", "Never completed"],
+  "office": [
+    "Application reviewed",
+    "Interview completed",
+    "Driver's license verified",
+    "MVR reviewed",
+    "Background/credential checks completed",
+    "Vehicle ownership/use authority verified",
+    "Registration verified",
+    "Insurance reviewed and approved for intended NEMT operation",
+    "Vehicle inspection/compliance review completed",
+    "Required training completed",
+    "Broker/provider credentialing completed (when applicable)",
+    "Written driver/contractor agreement completed",
+    "Payment/tax documentation completed",
+    "Driver activated for trip assignments"
+  ],
+  "officeStatuses": ["Waiting List", "Screening", "Pending Documents", "Pending Vehicle", "Approved", "Active", "Inactive/Suspended"]
+}

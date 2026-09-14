@@ -2,6 +2,13 @@
 declare(strict_types=1);
 require_once __DIR__ . '/booking.php';
 
+function driverOptions(): array
+{
+    static $options = null;
+    if ($options === null) $options = json_decode(file_get_contents(__DIR__ . '/driver-options.json'), true, 32, JSON_THROW_ON_ERROR);
+    return $options;
+}
+
 function driverLabels(): array
 {
     return [
@@ -15,7 +22,7 @@ function driverLabels(): array
 }
 function driverFields(): array
 {
-    return [...array_keys(driverLabels()), 'availability', 'consent', 'requestId'];
+    return [...array_keys(driverLabels()), 'availability', 'safetyChecks', ...array_keys(driverOptions()['credentials']), 'otherCertifications', 'consent', 'requestId'];
 }
 function validDriver(array $data): bool
 {
@@ -42,6 +49,12 @@ function validDriver(array $data): bool
     foreach (['vehicleYear' => [1900, (int)date('Y') + 1], 'seatingCapacity' => [1, 100], 'yearsLicensed' => [0, 100], 'mileage' => [0, 9999999]] as $key => [$min, $max]) {
         if (!isset($data[$key]) || !is_string($data[$key]) || !ctype_digit($data[$key]) || (int)$data[$key] < $min || (int)$data[$key] > $max) return false;
     }
+    $options = driverOptions();
+    if (!isset($data['safetyChecks']) || !is_array($data['safetyChecks']) || !array_is_list($data['safetyChecks']) || count($data['safetyChecks']) > count($options['safety'])) return false;
+    foreach ($data['safetyChecks'] as $value) if (!is_string($value) || !array_key_exists($value, $options['safety'])) return false;
+    if (count(array_unique($data['safetyChecks'])) !== count($data['safetyChecks'])) return false;
+    foreach ($options['credentials'] as $key => $label) if (!in_array($data[$key] ?? null, $options['trainingStatuses'], true)) return false;
+    if (isset($data['otherCertifications']) && (!is_string($data['otherCertifications']) || preg_match_all('/./us', $data['otherCertifications']) > 500 || preg_match('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', $data['otherCertifications']))) return false;
     return true;
 }
 function driverText(array $data): string
@@ -60,7 +73,18 @@ function driverText(array $data): string
         }
     }
     $lines[] = "\nImportant: A personal auto policy or ordinary registration is not automatically sufficient for paid NEMT service. No applicant may use a vehicle for Malydia trips until Malydia confirms applicable operating-authority, registration/plate, insurance, broker/provider, inspection, and credentialing requirements.";
+    $options = driverOptions();
+    $lines[] = "\n4. PRELIMINARY VEHICLE SAFETY CHECKLIST";
+    $lines[] = 'Applicant-reported only. Unchecked means not confirmed, not a completed inspection.';
+    foreach ($options['safety'] as $key => $label) $lines[] = (in_array($key, $data['safetyChecks'], true) ? '[x] ' : '[ ] ') . $label;
+    $lines[] = "\n5. TRAINING / CREDENTIALS";
+    foreach ($options['credentials'] as $key => $label) $lines[] = $label . ': ' . $data[$key];
+    $lines[] = 'Other relevant certifications: ' . (trim($data['otherCertifications'] ?? '') ?: 'Not provided');
     $lines[] = 'Applicant agreed to contact and waiting-list consideration: yes';
+    $lines[] = "\n6. MALYDIA ONBOARDING CHECKLIST - OFFICE USE";
+    $lines[] = 'For staff completion only. No verification, approval, or activation is implied by this submission.';
+    foreach ($options['office'] as $label) $lines[] = '[ ] ' . $label;
+    $lines[] = 'Status (office to assign): ' . implode('  ', array_map(fn($status) => '[ ] ' . $status, $options['officeStatuses']));
     return implode("\n", $lines);
 }
 function handleDriver(array $request, string $body, array $config, string $statePath, callable $send): int
